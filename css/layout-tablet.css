@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+.b-block{
+	padding: 0 24px;
+}
+	.b-top-menu{
+		display: none;
+	}
+		h1{
+			font-size: 30px;
+			line-height: 48px;
+		}
