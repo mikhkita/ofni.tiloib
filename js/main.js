@@ -28,6 +28,18 @@ $(document).ready(function(){
     $(window).resize(resize);
     resize();
 
+    //  if( $("#video").length ){
+    //     var video = document.getElementById('video');
+    //     // video.src = $("#videosource").attr("src");
+    //     // video.load();
+
+    //     video.addEventListener('loadeddata', function() {
+    //        // $(".b-main .b-video-cont").addClass("dark");
+    //        $(".b-bg-video-cont img").css("opacity", "0");
+    //        $(".b-bg-video-cont img").css("visibility", "hidden");
+    //     }, false);
+    // }
+    
     $.fn.placeholder = function() {
         if(typeof document.createElement("input").placeholder == 'undefined') {
             $('[placeholder]').focus(function() {
@@ -72,37 +84,156 @@ $(document).ready(function(){
     });
     
 
-    $(".b-event-green").height( $(".b-event-green").width());
-    $(".b-event-green").css("top", - ($(".b-event-green").width() / 2));
-    $(".b-event-description").css("top", - ($(".b-event-description").width() / 2 - 80));
+    // if (!isMobile){
+    //   $(".b-event-green").height( $(".b-event-green").width());
+    //   $(".b-event-green").css("top", - ($(".b-event-green").width() / 2));
+    //   $(".b-event-description").css("top", - ($(".b-event-description").width() / 2 - 80));
+    // }
 
     if (!isMobile) { 
       $('.b-demo-video').enllax();
+      $(".b-production-point").removeClass("fancy");
     }
     if (isMobile) { 
-      $('.b-info-items').slick();
-    }
-    if (isMobile) { 
+      // $('.b-info-items').slick();
+      // $(".b-production-point").addClass("fancy");
       $('.b-logos').slick();
     }
-
-  
-
-    $(".b-round-btn").on("click", function(){
-        $(".b-embedded-video").css("opacity", "1");
-        $(".b-round-btn").css("opacity", "0");
+    $(".b-info-items").slick({
+            infinite: true,
+            speed: 500,
+            slidesToScroll: 1,
+            slidesToShow: 4,
+            touchThreshold: 100,
+            arrows: true,
+            dots: true,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                    dots: true,
+                    slidesToShow: 3
+                  }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                    dots: true,
+                    slidesToShow: 2
+                  }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                    dots: false,
+                    slidesToShow: 1
+                  }
+                }
+            ]
     });
+    // $(".b-logos").slick({
+    //         infinite: true,
+    //         speed: 500,
+    //         slidesToScroll: 1,
+    //         slidesToShow: 4,
+    //         touchThreshold: 100,
+    //         arrows: true,
+    //         dots: true,
+    //         responsive: [
+    //             {
+    //                 breakpoint: 1024,
+    //                 settings: {
+    //                 dots: true,
+    //                 slidesToShow: 3
+    //               }
+    //             },
+    //             {
+    //                 breakpoint: 768,
+    //                 settings: {
+    //                 dots: true,
+    //                 slidesToShow: 2
+    //               }
+    //             },
+    //             {
+    //                 breakpoint: 600,
+    //                 settings: {
+    //                 dots: false,
+    //                 slidesToShow: 1
+    //               }
+    //             }
+    //         ]
+    // });
+
+
+    // $(".b-round-btn").on("click", function(){
+    //     $(".b-embedded-video").css("opacity", "1");
+    //     $(".b-round-btn").css("opacity", "0");
+    // });
 
     $(".b-production-slider").slick({
-        
         infinite: true,
         speed: 500,
         slidesToScroll: 1,
         touchThreshold: 100,
         arrows: true,
-        dots: false
-    });  
+        dots: false,
+        useCSS: true,
+        useTransform: true
+    });
+    $('.b-production-slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+        $(".b-production-tabs ul li").removeClass("active");
+        $('[data-id = ' + nextSlide + ']').addClass("active");
+    });
 
+     $(".fancy:not(.fancy-binded)").each(function(){
+            var $popup = $($(this).attr("data-block")),
+                $this = $(this);
+            console.log($(this).attr("data-manager"));
+            $this.fancybox({
+                padding : 0,
+                content : $popup,
+                touch: false,
+                helpers: {
+                    overlay: {
+                        locked: true 
+                    }
+                },
+                beforeShow: function(){
+                    $(".fancybox-wrap").addClass("beforeShow");
+                    $popup.find(".custom-field").remove();
+                    if( $this.attr("data-value") ){
+                        var name = getNextField($popup.find("form"));
+                        $popup.find("form").append("<input type='hidden' class='custom-field' name='"+name+"' value='"+$this.attr("data-value")+"'/><input type='hidden' class='custom-field' name='"+name+"-name' value='"+$this.attr("data-name")+"'/>");
+                    }
+                    if( $this.attr("data-beforeShow") && customHandlers[$this.attr("data-beforeShow")] ){
+                        customHandlers[$this.attr("data-beforeShow")]($this);
+                    }
+                },
+                afterShow: function(){
+                    $(".fancybox-wrap").removeClass("beforeShow");
+                    $(".fancybox-wrap").addClass("afterShow");
+                    if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
+                        customHandlers[$this.attr("data-afterShow")]($this);
+                    }
+                    $popup.find("input[type='text'],input[type='number'],textarea").eq(0).focus();
+                },
+                beforeClose: function(){
+                    $(".fancybox-wrap").removeClass("afterShow");
+                    $(".fancybox-wrap").addClass("beforeClose");
+                    if( $this.attr("data-beforeClose") && customHandlers[$this.attr("data-beforeClose")] ){
+                        customHandlers[$this.attr("data-beforeClose")]($this);
+                    }
+                },
+                afterClose: function(){
+                    $(".fancybox-wrap").removeClass("beforeClose");
+                    $(".fancybox-wrap").addClass("afterClose");
+                    if( $this.attr("data-afterClose") && customHandlers[$this.attr("data-afterClose")] ){
+                        customHandlers[$this.attr("data-afterClose")]($this);
+                    }
+                }
+            });
+                $this.addClass("fancy-binded");
+        });
     // $('.b-production-slider').on('beforeChange', function(event, slick, currentSlide, nextSlide){
     //     slide = $(this).attr("data-id");
     //     $(".b-production-tabs ul li").removeClass("active");
@@ -129,6 +260,7 @@ $(document).ready(function(){
         'side': 'right',
         'touch': false
       }); 
+
       $('#menu').css('display','block');
       $('#menu').css('opacity','0');
           function close(eve) {
@@ -295,55 +427,55 @@ $(document).ready(function(){
         ]
     };
 
-    // var eventMap = new google.maps.Map(document.getElementById("b-event-map"), myEventMapOptions); 
+    var eventMap = new google.maps.Map(document.getElementById("b-event-map"), myEventMapOptions); 
 
-    // var eventMarkerGreen = new google.maps.Marker({
-    //     icon: {
-    //             url: "../i/event-marker-green.svg",
-    //             scaledSize: new google.maps.Size(16, 16),
-    //             origin: new google.maps.Point(0,0),
-    //             anchor: new google.maps.Point(8,8),
-    //         },
-    //     position: greenPlace,
-    //     map: eventMap,
-    //     title: 'Экскурсия по заводу'
-    // });
-    // var eventMarkerYellow = new google.maps.Marker({
-    //     icon: {
-    //             url: "../i/event-marker-yellow.svg",
-    //             scaledSize: new google.maps.Size(16, 16),
-    //             origin: new google.maps.Point(0,0), 
-    //             anchor: new google.maps.Point(8,8),
-    //         },
-    //     position: yellowPlace,
-    //     map: eventMap,
-    //     title: 'Лекция по препаратам'
-    // });
-    // var eventMarkerGray = new google.maps.Marker({
-    //     icon: {
-    //             url: "../i/event-marker-gray.svg",
-    //             scaledSize: new google.maps.Size(16, 16),
-    //             origin: new google.maps.Point(0,0),
-    //             anchor: new google.maps.Point(8,8),
-    //         },
-    //     position: grayPlace,
-    //     map: eventMap,
-    //     title: 'Фармацевтический форум'
-    // });
+    var eventMarkerGreen = new google.maps.Marker({
+        icon: {
+                url: "../i/event-marker-green.svg",
+                scaledSize: new google.maps.Size(16, 16),
+                origin: new google.maps.Point(0,0),
+                anchor: new google.maps.Point(8,8),
+            },
+        position: greenPlace,
+        map: eventMap,
+        title: 'Экскурсия по заводу'
+    });
+    var eventMarkerYellow = new google.maps.Marker({
+        icon: {
+                url: "../i/event-marker-yellow.svg",
+                scaledSize: new google.maps.Size(16, 16),
+                origin: new google.maps.Point(0,0), 
+                anchor: new google.maps.Point(8,8),
+            },
+        position: yellowPlace,
+        map: eventMap,
+        title: 'Лекция по препаратам'
+    });
+    var eventMarkerGray = new google.maps.Marker({
+        icon: {
+                url: "../i/event-marker-gray.svg",
+                scaledSize: new google.maps.Size(16, 16),
+                origin: new google.maps.Point(0,0),
+                anchor: new google.maps.Point(8,8),
+            },
+        position: grayPlace,
+        map: eventMap,
+        title: 'Фармацевтический форум'
+    });
   
 
-    function initMap() {
-      var biolit = {lat: 56.4742102, lng: 85.0501512};
-      var map = new google.maps.Map(document.getElementById('b-map'), {
-        zoom: 16,
-        center: biolit,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: true,
-        scrollwheel: false,
-        zoomControl: true
-      });
-    };
-  initMap();
+    // function initMap() {
+    //   var biolit = {lat: 56.4742102, lng: 85.0501512};
+    //   var map = new google.maps.Map(document.getElementById('b-map'), {
+    //     zoom: 16,
+    //     center: biolit,
+    //     mapTypeId: google.maps.MapTypeId.ROADMAP,
+    //     disableDefaultUI: true,
+    //     scrollwheel: false,
+    //     zoomControl: true
+    //   });
+    // };
+  // initMap();
   var contentString1 =  '<div class="b-bubble-cont">' +
                             '<div class="b-event-green-bubble">' +
                                 '<div class="b-event-date-bubble">22 октября</div>' +
@@ -378,89 +510,98 @@ $(document).ready(function(){
                             '</div>' +
                         '</div>';
 
-//    var infoBubble1 = new InfoBubble({
-//       map: eventMap,
-//       content: contentString1,
-//       position: greenPlace,
-//       shadowStyle: 0,
-//       padding: 0,
-//       minWidth: 350,
-//       minHeight: 308,
-//       backgroundColor: '#fff',
-//       borderRadius: 30,
-//       arrowSize: 20,
-//       borderWidth: 0,
-//       borderColor: '#2c2c2c',
-//       disableAutoPan: true,
-//       hideCloseButton: false,
-//       arrowPosition: '50',
-//       backgroundClassName: 'transparent',
-//       tabClassName: 'bubble',
-//       arrowStyle: 0,
-//       closeSrc: '../i/close-cross.svg'
+   var infoBubble1 = new InfoBubble({
+      map: eventMap,
+      content: contentString1,
+      position: greenPlace,
+      shadowStyle: 0,
+      padding: 0,
+      minWidth: 350,
+      minHeight: 308,
+      backgroundColor: '#fff',
+      borderRadius: 30,
+      arrowSize: 20,
+      borderWidth: 0,
+      borderColor: '#2c2c2c',
+      disableAutoPan: true,
+      hideCloseButton: false,
+      arrowPosition: '50',
+      backgroundClassName: 'transparent',
+      tabClassName: 'bubble',
+      arrowStyle: 0,
+      closeSrc: '../i/close-cross.svg'
 
-// });
-//    var infoBubble2 = new InfoBubble({
-//       map: eventMap,
-//       content: contentString2,
-//       position: yellowPlace,
-//       shadowStyle: 0,
-//       padding: 0,
-//       minWidth: 350,
-//       minHeight: 308,
-//       backgroundColor: '#fff',
-//       borderRadius: 30,
-//       arrowSize: 20,
-//       borderWidth: 0,
-//       borderColor: '#2c2c2c',
-//       disableAutoPan: true,
-//       hideCloseButton: false,
-//       arrowPosition: '50',
-//       backgroundClassName: 'transparent',
-//       tabClassName: 'bubble',
-//       arrowStyle: 0,
-//       closeSrc: '../i/close-cross.svg'
-// });
-//    var infoBubble3 = new InfoBubble({
-//       map: eventMap,
-//       content: contentString3,
-//       position: grayPlace,
-//       shadowStyle: 0,
-//       padding: 0,
-//       minWidth: 350,
-//       minHeight: 308,
-//       backgroundColor: '#fff',
-//       borderRadius: 30,
-//       arrowSize: 20,
-//       borderWidth: 0,
-//       borderColor: '#2c2c2c',
-//       disableAutoPan: true,
-//       hideCloseButton: false,
-//       arrowPosition: '50',
-//       backgroundClassName: 'transparent',
-//       tabClassName: 'bubble',
-//       arrowStyle: 0,
-//       closeSrc: '../i/close-cross.svg'
-// });
-  var marker = new google.maps.Marker({
-    icon: {
-        url: "../i/marker.svg",
-        scaledSize: new google.maps.Size(28, 40), // scaled size
-        origin: new google.maps.Point(0,0), // origin
-        anchor: new google.maps.Point(17,53), // anchor
-    },
-    position: biolit,
-    map: map,
-    title: 'ООО Биолит'
-  });
+});
+   var infoBubble2 = new InfoBubble({
+      map: eventMap,
+      content: contentString2,
+      position: yellowPlace,
+      shadowStyle: 0,
+      padding: 0,
+      minWidth: 350,
+      minHeight: 308,
+      backgroundColor: '#fff',
+      borderRadius: 30,
+      arrowSize: 20,
+      borderWidth: 0,
+      borderColor: '#2c2c2c',
+      disableAutoPan: true,
+      hideCloseButton: false,
+      arrowPosition: '50',
+      backgroundClassName: 'transparent',
+      tabClassName: 'bubble',
+      arrowStyle: 0,
+      closeSrc: '../i/close-cross.svg'
+});
+   var infoBubble3 = new InfoBubble({
+      map: eventMap,
+      content: contentString3,
+      position: grayPlace,
+      shadowStyle: 0,
+      padding: 0,
+      minWidth: 350,
+      minHeight: 308,
+      backgroundColor: '#fff',
+      borderRadius: 30,
+      arrowSize: 20,
+      borderWidth: 0,
+      borderColor: '#2c2c2c',
+      disableAutoPan: true,
+      hideCloseButton: false,
+      arrowPosition: '50',
+      backgroundClassName: 'transparent',
+      tabClassName: 'bubble',
+      arrowStyle: 0,
+      closeSrc: '../i/close-cross.svg'
+});
+  // var marker = new google.maps.Marker({
+  //   icon: {
+  //       url: "../i/marker.svg",
+  //       scaledSize: new google.maps.Size(28, 40), // scaled size
+  //       origin: new google.maps.Point(0,0), // origin
+  //       anchor: new google.maps.Point(17,53), // anchor
+  //   },
+  //   position: biolit,
+  //   map: map,
+  //   title: 'ООО Биолит'
+  // });
   eventMarkerGreen.addListener('click', function() {
-    infoBubble1.open(eventMap, eventMarkerGreen);
+    setTimeout(function () {
+        $(".js-info-bubble-close").click();
+        infoBubble1.open(eventMap, eventMarkerGreen);
+    }, 50);
   });
   eventMarkerYellow.addListener('click', function() {
-    infoBubble2.open(eventMap, eventMarkerYellow);
+    setTimeout(function () {
+        $(".js-info-bubble-close").click();
+        infoBubble2.open(eventMap, eventMarkerYellow);
+    }, 50);
   });
   eventMarkerGray.addListener('click', function() {
-    infoBubble3.open(eventMap, eventMarkerGray);
+     setTimeout(function () {
+        $(".js-info-bubble-close").click();
+        infoBubble3.open(eventMap, eventMarkerGray);
+    }, 50);
   });
 
 });

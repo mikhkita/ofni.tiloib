@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+body{
+	min-width: 240px;
+    overflow-x: hidden;
+}
+
 .b-block{
 	padding: 0 24px;
 }
@@ -10,3 +15,39 @@
 			font-size: 30px;
 			line-height: 48px;
 		}
+.b-partnership-pictures{
+	display: none;
+}
+.b-event{
+	max-width: none;
+}
+.b-history{
+	width: calc(100% - 140px);
+}
+.b-detail .b-text {
+    max-width: 662px;
+    float: right;
+    width: calc(100% - 290px);
+}
+.b-detail img {
+    float: left;
+    max-width: 250px;
+}
+.b-milestone:first-child{
+	margin-top: 30px;
+}
+
+
+
+/*--------------------------------------------*/
+@media screen and (max-width: 900px){
+	.b-detail img{
+		width: 100%;
+		float: none;
+	}
+	.b-detail .b-text {
+	    max-width: none;
+	    float: none;
+	    width: 100%;
+	}
+}

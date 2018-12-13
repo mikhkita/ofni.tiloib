@@ -291,6 +291,12 @@ ul li{
     height: 100%;
     overflow: hidden;
 }
+	.b-bg-video-cont img{
+		opacity: 1;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+	}
 	.b-bg-video-cont .b-video{
 		/*width: 100%;
 */	}
@@ -563,7 +569,7 @@ ul li{
 			vertical-align: middle;
 			position: relative;
 			top: -3px;
-			left: -10px;
+			/*left: -10px;*/
 		}
 	.b-header-middle{
 		height: calc(100vh - 180px);
@@ -717,6 +723,25 @@ ul li{
 		margin-top: 70px;
 		z-index: 5;
 	}
+	.b-demo-video:before{
+		width: 100%;
+	    height: 100%;
+	    opacity: 0;
+	    position: absolute;
+	    background-color: #000;
+	    z-index: -1;
+	    content: " ";
+	    top: 0px;
+    	left: 0px;
+    	-webkit-transition: opacity 0.3s;
+	    -moz-transition: opacity 0.3s;
+	    -o-transition: opacity 0.3s;
+	    transition: opacity 0.3s;
+	}
+		.b-demo-video:hover:before{
+			opacity: 0.3;
+		}
+
 	.b-embedded-video{
 		position: absolute;
 		z-index: 4;
@@ -785,7 +810,6 @@ ul li{
 	}
 		.b-info-item{
 			width: calc(100% / 4);
-			max-width: 130px;
 			display: inline-block;
 			text-align: center;
 		}
@@ -803,7 +827,7 @@ ul li{
 .b-events-block{
 	position: relative;
 	/* top: -18px; */
-	padding-bottom: 78px;
+	padding-bottom: 90px;
 	padding-top: 60px;
 	background-color: #f4f7fc;
 }
@@ -870,6 +894,10 @@ ul li{
 					color: #000000;
 					line-height: 24px;
 				}
+				.b-news-block .b-btn{
+					margin-top: 10px;
+					display: inline-block;
+				}
 .b-news-block{
 	/* background-color: #F4F7FC; */
 	padding-top: 80px;
@@ -885,6 +913,13 @@ ul li{
 	.b-new:last-child{
 		margin-right: 0px;
 	}
+		.b-event-description p,
+		.b-news-block p{
+			font-family: ProximaNova-Regular;
+			font-size: 16px;
+			color: #000000;
+			line-height: 24px;
+		}
 		.b-new{
 			display: inline-block;
 			max-width: 350px;
@@ -895,6 +930,7 @@ ul li{
 			text-align: left;
 			margin-right: 51px;
 			border-radius: 10px;
+			cursor: pointer;
 		}
 			.b-news-picture{
 		
@@ -902,7 +938,8 @@ ul li{
 			.b-news-description{
 				padding: 25px;
 			}
-			.b-read-more{
+			.b-read-more,
+			p.b-read-more{
 				display: inline-block;
 				margin-top: 12px;
 				font-family: ProximaNova-Semibold;
@@ -910,6 +947,7 @@ ul li{
 				color: #0A9740;
 				cursor: pointer;
 				position: relative;
+
 			}
 				.b-read-more:after{
 					content: " ";
@@ -1167,9 +1205,8 @@ ul li{
 			left: calc(50% - 100px);
 		}
 		.b-library-cover img{
-			position: absolute
+			position: absolute;
 			left: 0px;
-			top: 0px;
 		}
 			.back .b-library-item{
 				padding: 0px;
@@ -1179,7 +1216,7 @@ ul li{
 		.b-library,
 		.b-categories{
 			padding-top: 36px;
-			padding-bottom: 80px;
+			padding-bottom: 50px;
 		}
 		.b-back-cont{
 			width: 100%;
@@ -1255,7 +1292,7 @@ ul li{
 				display: inline-block;
 				border: 1px solid #CDCDCD;
 				padding: 25px 15px;
-				width: 258px;
+				width: calc((100% / 4) - 24px);
 				min-height: 320px;
 				border-radius: 10px;
 				text-align: center;
@@ -1425,7 +1462,7 @@ ul li{
 				.b-production-card{
 					position: absolute;
 					background-color: #fff;
-					border-radius: 20px;
+					border-radius: 15px;
 					display: inline-block;
 					width: 305px;
 					height: 409px;
@@ -1699,6 +1736,12 @@ ul li{
 	height: 183px;
 	top: -90px;
 }
+	.b-event-description{
+		text-align: left;
+	    display: inline-block;
+	    top: -70px;
+	    position: relative;
+	}
 	.b-event-date-bubble{
 		position: relative;
 		top: 58.4%;
@@ -1772,13 +1815,6 @@ ul li{
 			margin-bottom: 7px;
 
 		}
-		.b-event-description p,
-		.b-news-block p{
-			font-family: ProximaNova-Regular;
-			font-size: 16px;
-			color: #000000;
-			line-height: 24px;
-		}
 .toggle-button{
 	display: none;
 }
@@ -1842,6 +1878,7 @@ ul li{
 				display: inline-block;
 				vertical-align: middle;
 				margin-right: 63px;
+				width: 70px;
 			}
 			.b-first-text p{
 				font-family: ProximaNova-Regular;
@@ -1958,49 +1995,44 @@ ul li{
 		.b-ceo h4{
 			padding-top: 12px;
 		}
-.b-catalogue-item{
-	width: calc(50% - 24px);
-}
-	.b-catalogue-item img{
-		height: 50px;
-	}
-.flipcard {
-position: relative;
-width: 258px;
-height: 364px;
-perspective: 500px;
-display: inline-block;
+.flipcard{
+	position: relative;
+	width: calc((100% / 4) - 24px);
+	height: 364px;
+	perspective: 500px;
+	display: inline-block;
 }
 .flipcard.v:hover .front, .flipcard.v.flip .front{
-transform: rotateX(-180deg);
+	transform: rotateX(-180deg);
 }
 .flipcard.v:hover .back, .flipcard.v.flip .back{
-transform: rotateX(0deg);
+	transform: rotateX(0deg);
 }
 .flipcard.v .back{
-transform: rotateX(180deg);
+	transform: rotateX(180deg);
 }
 .flipcard.h:hover .front, .flipcard.h.flip .front{
-transform: rotateY(-180deg);
+	transform: rotateY(-180deg);
 }
 .flipcard.h:hover .back, .flipcard.h.flip .back{
-transform: rotateY(0deg);
+	transform: rotateY(0deg);
 }
 .flipcard.h .back{
-transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 .flipcard .front, .flipcard .back
 {
-position:absolute;
-width: 100%;
-height: 100%;
-box-sizing: border-box;
-transition: all 0.2s ease-in;
-color: white;
-background-color: transparent;
-padding: 10px;
-backface-visibility: hidden;
+	position:absolute;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	transition: all 0.2s ease-in;
+	color: white;
+	background-color: transparent;
+	padding: 10px;
+	backface-visibility: hidden;
 }
+
 
 
 .justify{
@@ -2098,6 +2130,8 @@ input:-moz-placeholder {
 @media screen and (max-width: 1250px){
 	
 }
-@media screen and (max-width: 1020px){
-
+@media screen and (max-width: 1024px){
+	.flipcard{
+		width: calc((100% / 3) - 24px);
+	}
 }
